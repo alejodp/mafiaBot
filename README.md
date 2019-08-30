@@ -1,0 +1,2 @@
+# mafiaBot
+Discord Mafia Bot
