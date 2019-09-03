@@ -1,12 +1,13 @@
 {
  "name": "mafiaBot",
- "version": "0.0.1",
+ "version": "1.0.0",
  "author": {
   "name": "Alejandro Diaz",
   "email": "alejodp93@gmail.com"
  },
  "dependencies": {
   "better-sqlite3": "^5.4.2",
+  "discord.js": "^11.5.1",
   "enmap": "^5.1.2",
   "node-gyp": "^5.0.3"
  }

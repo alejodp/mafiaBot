@@ -1,15 +1,15 @@
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const prefix = "!"
-var votingStarted = 0
-var votingEnded = 0
+const chat = require('./lib/chat.js');
+const config = require("./lib/config.json");
+
 client.on('ready', () => {
 	console.log("Connected as " + client.user.tag)
 	//List of servers the bot is connected to
 	// console.log("Servers:")
 	client.guilds.forEach((guild) => {
 		// console.log(" - " + guild.name)
-
 		//List of channels
 		guild.channels.forEach((channel) => {
 			// console.log(` -- ${channel.name} (${channel.type}) - ${channel.id}`)
@@ -23,7 +23,6 @@ client.on('ready', () => {
 	})
 })
 
-
 client.on('message', (receivedMessage) => {
 	if (receivedMessage.author == client.user) {
 		return
@@ -36,51 +35,19 @@ client.on('message', (receivedMessage) => {
 	        receivedMessage.author.toString() + ": " + receivedMessage.content)
 	}
 
-
+	//User sent a command.
 	if (receivedMessage.content.startsWith(prefix)) {
 		// console.log("User has sent a command")
-		processCommand(receivedMessage)		
+		chat.processCommand(receivedMessage)
 	}
 
-	if (votingStarted && !votingEnded) {
-		//Voting has started 
-		if (receivedMessage.content.startsWith("**vote:") && receivedMessage.content.endsWith("**")) {
-			receivedMessage.react("👍")
-			processVote(receivedMessage)
-		}
+	//Process vote message
+	if (receivedMessage.content.startsWith("**vote:") && receivedMessage.content.endsWith("**")) {
+		chat.processVote(receivedMessage)
 	}
 
 })
 
-function processVote(receivedMessage) {
-	let messageString = receivedMessage.content.toString()
-	let splitMessage = messageString.split(":")
-	let vote = splitMessage[1].replace(/\*/g, "")
 
-	console.log("Received vote for: --" + vote + "-- from " + receivedMessage.author.username.toString())
-}
-
-function processCommand (receivedMessage) {
-	let fullCommand = receivedMessage.content.substr(1) // Remove the leading exclamation mark
-    let splitCommand = fullCommand.split(" ") // Split the message up in to pieces for each space
-    let primaryCommand = splitCommand[0] // The first word directly after the exclamation is the command
-
-    console.log("Command received: " + primaryCommand)
-    if (primaryCommand == "startVote") {
-		receivedMessage.channel.send("Ok! I will start recording votes now.")
-		votingStarted = 1
-    } else if (primaryCommand == "endVote") {
-    	receivedMessage.channel.send("Ok! I will stop recording votes now.")
-		votingStarted = 0
-		votingEnded = 1
-    } else {
-    	receivedMessage.channel.send("I don't understand the command.")
-    }
-
-
-}
-//Bot's secret token
-bot_secret_token = "NjE2ODc5NjIxNTI2NTE5ODA5.XWp-6w.1TfSyffmhWQ_llCEHrZipJpeNCc"
-
-client.login(bot_secret_token)
+client.login(config.token)
 

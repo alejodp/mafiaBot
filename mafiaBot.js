@@ -42,7 +42,7 @@ client.on('message', (receivedMessage) => {
 	}
 
 	//Process vote message
-	if (receivedMessage.content.startsWith("**vote:") && receivedMessage.content.endsWith("**")) {
+	if (receivedMessage.content.startsWith("**") && receivedMessage.content.endsWith("**")) {
 		chat.processVote(receivedMessage)
 	}
 
